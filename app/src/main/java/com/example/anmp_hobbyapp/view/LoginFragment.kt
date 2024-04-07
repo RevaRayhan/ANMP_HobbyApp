@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.android.volley.RequestQueue
@@ -23,7 +24,7 @@ import org.json.JSONObject
 class LoginFragment : Fragment() {
 
     private lateinit var binding:FragmentLoginBinding
-    private var userLogin:User? = null
+    private lateinit var viewModel: UserViewModel
 
     val TAG = "volleyTag"
     private var queue: RequestQueue? = null
@@ -39,37 +40,57 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnSignIn.setOnClickListener {
-            checkLogin(binding.txtUsername.editText?.text.toString(), binding.txtPassword.editText?.text.toString())
-            val action = LoginFragmentDirections.actionhobbyListFragment()
+        binding.btnSignIn.setOnClickListener {view->
+            viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+            viewModel.checkLogin(binding.txtUsername.editText?.text.toString(), binding.txtPassword.editText?.text.toString())
+
+            viewModel.userLD.observe(viewLifecycleOwner, Observer {
+                var userLogin = it
+
+                if (userLogin != null) {
+                    val action = LoginFragmentDirections.actionhobbyListFragment()
+                    Navigation.findNavController(view).navigate(action)
+                }
+                else {
+//                    Toast.makeText(activity, "No user found with that username or password", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+        binding.btnCreateAcc.setOnClickListener {
+            val action = LoginFragmentDirections.actionRegisterFragment()
             Navigation.findNavController(it).navigate(action)
         }
     }
 
-    fun checkLogin(username:String, password:String) {
-        queue = Volley.newRequestQueue(activity)
-        val url = "http://192.168.188.132/ANMP/HobbyApp/user_login.php"
+    fun observeViewModel() {
 
-        val stringRequest = object : StringRequest(
-            Method.POST, url, { response->
-                userLogin = Gson().fromJson(response, User::class.java)
-
-                Toast.makeText(activity, "Login Successful", Toast.LENGTH_SHORT).show()
-                Log.d("Success", "Response: ${userLogin}")
-            }, {
-                Toast.makeText(activity, "Login Failed", Toast.LENGTH_SHORT).show()
-                Log.d("error", it.toString())
-            }
-        )
-        {
-            override fun getParams(): MutableMap<String, String>? {
-                val params = HashMap<String, String>()
-                params["username"] = username
-                params["password"] = password
-                return params
-            }
-        }
-        stringRequest.tag = TAG
-        queue?.add(stringRequest)
     }
+
+//    fun checkLogin(username:String, password:String) {
+//        queue = Volley.newRequestQueue(activity)
+//        val url = "http://192.168.1.14/ANMP/HobbyApp/user_login.php"
+//
+//        val stringRequest = object : StringRequest(
+//            Method.POST, url, { response->
+//                userLogin = Gson().fromJson(response, User::class.java)
+//
+//                Toast.makeText(activity, "Login Successful", Toast.LENGTH_SHORT).show()
+//                Log.d("Success", "Response: ${userLogin}")
+//            }, {
+//                Toast.makeText(activity, "Login Failed", Toast.LENGTH_SHORT).show()
+//                Log.d("error", it.toString())
+//            }
+//        )
+//        {
+//            override fun getParams(): MutableMap<String, String>? {
+//                val params = HashMap<String, String>()
+//                params["username"] = username
+//                params["password"] = password
+//                return params
+//            }
+//        }
+//        stringRequest.tag = TAG
+//        queue?.add(stringRequest)
+//    }
 }
