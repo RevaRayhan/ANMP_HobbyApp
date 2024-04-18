@@ -48,5 +48,6 @@ class MainActivity : AppCompatActivity() {
     fun hideBottomNavDrawer() {
         binding.bottomNav.visibility = View.INVISIBLE
         binding.navView.visibility = View.INVISIBLE
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 }

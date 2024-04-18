@@ -60,16 +60,16 @@ class HobbyDetailFragment : Fragment() {
                         binding.txtContent.setText(it.content?.get(index))
                         if ((index+1) == contentSize) {
                             binding.btnNext.isEnabled = false
-                            binding.btnPrev.isEnabled = true
                         }
+                            binding.btnPrev.isEnabled = true
                     }
                     binding.btnPrev.setOnClickListener {view->
                         index -= 1
                         binding.txtContent.setText(it.content?.get(index))
                         if (index == 0) {
                             binding.btnPrev.isEnabled = false
-                            binding.btnNext.isEnabled = true
                         }
+                            binding.btnNext.isEnabled = true
                     }
                 }
                 else {

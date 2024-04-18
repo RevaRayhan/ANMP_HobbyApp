@@ -15,7 +15,7 @@ import com.google.gson.Gson
 import org.json.JSONObject
 
 class UserViewModel(application: Application): AndroidViewModel(application) {
-    val userLD = MutableLiveData<User>()
+    val userLD = MutableLiveData<User?>()
     val registerLD = MutableLiveData<Boolean>()
     val updateLD = MutableLiveData<Boolean>()
     val TAG = "volleyTag"
@@ -28,10 +28,15 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
 
         val stringRequest = object : StringRequest(
             Method.POST, url, {response->
-                userLD.value = Gson().fromJson(response, User::class.java)
+                if (response != "null") {
+                    userLD.value = Gson().fromJson(response, User::class.java)
 
-                Toast.makeText(getApplication(), "Login Successful", Toast.LENGTH_SHORT).show()
-                Log.d("Success", "Response: ${response}")
+                    Toast.makeText(getApplication(), "Login Successful", Toast.LENGTH_SHORT).show()
+                    Log.d("Success", "Response: ${response}")
+                }
+                else {
+                    userLD.value = null
+                }
             }, {
                 Toast.makeText(getApplication(), "Login Failed", Toast.LENGTH_SHORT).show()
                 Log.d("login error", it.toString())

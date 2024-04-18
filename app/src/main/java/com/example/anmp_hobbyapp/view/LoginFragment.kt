@@ -70,7 +70,7 @@ class LoginFragment : Fragment() {
                     Navigation.findNavController(view).navigate(action)
                 }
                 else {
-//                    Toast.makeText(activity, "No user found with that username or password", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "No user found with that username or password", Toast.LENGTH_SHORT).show()
                 }
             })
         }

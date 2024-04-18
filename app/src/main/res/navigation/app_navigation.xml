@@ -12,9 +12,7 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/actionhobbyListFragment"
-            app:destination="@id/hobbyListFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/hobbyListFragment" />
         <action
             android:id="@+id/actionRegisterFragment"
             app:destination="@id/registerFragment" />
