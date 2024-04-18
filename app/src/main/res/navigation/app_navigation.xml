@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/actionhobbyListFragment"
-            app:destination="@id/hobbyListFragment" />
+            app:destination="@id/hobbyListFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/actionRegisterFragment"
             app:destination="@id/registerFragment" />
@@ -34,7 +36,7 @@
         <action
             android:id="@+id/actionLoginFragment"
             app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
+            app:popUpTo="@id/registerFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -44,5 +46,16 @@
         tools:layout="@layout/fragment_hobby_detail" >
         <argument android:name="id"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.anmp_hobbyapp.view.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/actionloginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

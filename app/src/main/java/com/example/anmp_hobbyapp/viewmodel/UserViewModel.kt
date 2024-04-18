@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -16,6 +17,7 @@ import org.json.JSONObject
 class UserViewModel(application: Application): AndroidViewModel(application) {
     val userLD = MutableLiveData<User>()
     val registerLD = MutableLiveData<Boolean>()
+    val updateLD = MutableLiveData<Boolean>()
     val TAG = "volleyTag"
     private var queue:RequestQueue? = null
 
@@ -72,6 +74,36 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
                 params["username"] = username
                 params["password"] = password
                 params["photo_url"] = photoURL
+                return params
+            }
+        }
+        stringRequest.tag = TAG
+        queue?.add(stringRequest)
+    }
+
+    fun updateUser(id:String, firstName: String, lastName: String, password: String) {
+        queue = Volley.newRequestQueue(getApplication())
+        //IP Change
+        val url = "http://192.168.188.132/ANMP/HobbyApp/user_update.php"
+
+        val stringRequest = object : StringRequest(
+            Method.POST, url, {response->
+                updateLD.value = true
+                Toast.makeText(getApplication(), "Update Successful", Toast.LENGTH_SHORT).show()
+                Log.d("Success", "Response: ${response}")
+            }, {
+                updateLD.value = false
+//                Toast.makeText(getApplication(), "Update Failed", Toast.LENGTH_SHORT).show()
+                Log.d("Update error", it.toString())
+            }
+        )
+        {
+            override fun getParams(): MutableMap<String, String>? {
+                val params = HashMap<String, String>()
+                params["id"] = id
+                params["first_name"] = firstName
+                params["last_name"] = lastName
+                params["password"] = password
                 return params
             }
         }

@@ -1,5 +1,6 @@
 package com.example.anmp_hobbyapp.view
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -25,9 +26,14 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding:FragmentLoginBinding
     private lateinit var viewModel: UserViewModel
+    private lateinit var mainActivity: MainActivity
 
-    val TAG = "volleyTag"
-    private var queue: RequestQueue? = null
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            mainActivity = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,14 +46,26 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+
         binding.btnSignIn.setOnClickListener {view->
-            viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
             viewModel.checkLogin(binding.txtUsername.editText?.text.toString(), binding.txtPassword.editText?.text.toString())
+
+            val loginaccount = requireActivity().getSharedPreferences("login", Context.MODE_PRIVATE)
+            val loginValue = loginaccount.edit()
 
             viewModel.userLD.observe(viewLifecycleOwner, Observer {
                 var userLogin = it
 
                 if (userLogin != null) {
+                    loginValue.putString("id", userLogin.id)
+                    loginValue.putString("firstName", userLogin.first_name)
+                    loginValue.putString("lastName", userLogin.last_name)
+                    loginValue.putString("password", userLogin.password)
+                    loginValue.putString("photo_url", userLogin.photo_url)
+                    loginValue.apply()
+
+                    mainActivity.showBottomNavDrawer()
                     val action = LoginFragmentDirections.actionhobbyListFragment()
                     Navigation.findNavController(view).navigate(action)
                 }
@@ -62,35 +80,4 @@ class LoginFragment : Fragment() {
             Navigation.findNavController(it).navigate(action)
         }
     }
-
-    fun observeViewModel() {
-
-    }
-
-//    fun checkLogin(username:String, password:String) {
-//        queue = Volley.newRequestQueue(activity)
-//        val url = "http://192.168.1.14/ANMP/HobbyApp/user_login.php"
-//
-//        val stringRequest = object : StringRequest(
-//            Method.POST, url, { response->
-//                userLogin = Gson().fromJson(response, User::class.java)
-//
-//                Toast.makeText(activity, "Login Successful", Toast.LENGTH_SHORT).show()
-//                Log.d("Success", "Response: ${userLogin}")
-//            }, {
-//                Toast.makeText(activity, "Login Failed", Toast.LENGTH_SHORT).show()
-//                Log.d("error", it.toString())
-//            }
-//        )
-//        {
-//            override fun getParams(): MutableMap<String, String>? {
-//                val params = HashMap<String, String>()
-//                params["username"] = username
-//                params["password"] = password
-//                return params
-//            }
-//        }
-//        stringRequest.tag = TAG
-//        queue?.add(stringRequest)
-//    }
 }

@@ -42,10 +42,39 @@ class HobbyDetailFragment : Fragment() {
             else {
                 binding.txtTitle.setText(it.title)
                 binding.txtUsername.setText("@${it.username}")
-                binding.txtContent.setText("") //figure how to do the multiple pages for the content
                 val picasso = Picasso.Builder(binding.root.context)
                 picasso.listener { picasso, uri, exception ->  exception.printStackTrace()}
                 picasso.build().load(it.image_url).into(binding.imgNews)
+
+//                it.content?.getOrNull(1)?.let {
+//                    binding.txtContent.setText(it)
+//                }
+                var contentSize = it.content?.size ?:0
+                var index = 0
+                if (contentSize > 0) {
+                    binding.txtContent.setText(it.content?.get(index))
+                    binding.btnPrev.isEnabled = false
+
+                    binding.btnNext.setOnClickListener {view->
+                        index += 1
+                        binding.txtContent.setText(it.content?.get(index))
+                        if ((index+1) == contentSize) {
+                            binding.btnNext.isEnabled = false
+                            binding.btnPrev.isEnabled = true
+                        }
+                    }
+                    binding.btnPrev.setOnClickListener {view->
+                        index -= 1
+                        binding.txtContent.setText(it.content?.get(index))
+                        if (index == 0) {
+                            binding.btnPrev.isEnabled = false
+                            binding.btnNext.isEnabled = true
+                        }
+                    }
+                }
+                else {
+                    binding.txtContent.setText("There is no content")
+                }
             }
         })
     }
