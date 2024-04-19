@@ -33,7 +33,9 @@ class MainActivity : AppCompatActivity() {
 
         NavigationUI.setupWithNavController(binding.navView, navController)
         binding.bottomNav.setupWithNavController(navController)
+        binding.bottomNav.visibility = View.INVISIBLE
         binding.navView.isVisible = false
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 //    PUNYA REVA RAYHANSYAHRONI NADITYAPUTRA - 160421103
