@@ -18,6 +18,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
     val userLD = MutableLiveData<User?>()
     val registerLD = MutableLiveData<Boolean>()
     val updateLD = MutableLiveData<Boolean>()
+    val goNavigate = MutableLiveData<Boolean>()
     val TAG = "volleyTag"
     private var queue:RequestQueue? = null
 
@@ -28,14 +29,17 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
 
         val stringRequest = object : StringRequest(
             Method.POST, url, {response->
-                if (response != "null") {
-                    userLD.value = Gson().fromJson(response, User::class.java)
+                val res = JSONObject(response)
+                if (res.getString("response") == "success") {
+                    userLD.value = Gson().fromJson(res.getString("data"), User::class.java)
+                    goNavigate.value = true
 
                     Toast.makeText(getApplication(), "Login Successful", Toast.LENGTH_SHORT).show()
                     Log.d("Success", "Response: ${response}")
                 }
                 else {
                     userLD.value = null
+                    goNavigate.value = false
                 }
             }, {
                 Toast.makeText(getApplication(), "Login Failed", Toast.LENGTH_SHORT).show()

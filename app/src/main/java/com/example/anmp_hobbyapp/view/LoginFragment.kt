@@ -64,7 +64,16 @@ class LoginFragment : Fragment() {
                     loginValue.putString("password", userLogin.password)
                     loginValue.putString("photo_url", userLogin.photo_url)
                     loginValue.apply()
+                    viewModel.goNavigate.value = true
+                }
+                else {
+                    Toast.makeText(activity, "No user found with that username or password", Toast.LENGTH_SHORT).show()
+                    viewModel.goNavigate.value = false
+                }
+            })
 
+            viewModel.goNavigate.observe(viewLifecycleOwner, Observer {nav->
+                if (nav == true) {
                     mainActivity.showBottomNavDrawer()
                     val action = LoginFragmentDirections.actionhobbyListFragment()
                     Navigation.findNavController(view).navigate(action)
