@@ -17,6 +17,8 @@ import com.example.anmp_hobbyapp.viewmodel.UserViewModel
 
 class MainActivity : AppCompatActivity() {
 
+//    PUNYA REVA RAYHANSYAHRONI NADITYAPUTRA - 160421103
+
     private lateinit var binding:ActivityMainBinding
     private lateinit var navController: NavController
 
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
+//    PUNYA REVA RAYHANSYAHRONI NADITYAPUTRA - 160421103
 
     override fun onSupportNavigateUp(): Boolean {
 //        return navController.navigateUp()
