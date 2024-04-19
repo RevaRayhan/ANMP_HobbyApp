@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -32,8 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         NavigationUI.setupWithNavController(binding.navView, navController)
         binding.bottomNav.setupWithNavController(navController)
-        binding.bottomNav.visibility = View.INVISIBLE
-
+        binding.navView.isVisible = false
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 //    PUNYA REVA RAYHANSYAHRONI NADITYAPUTRA - 160421103
@@ -44,13 +44,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showBottomNavDrawer() {
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN)
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         binding.bottomNav.visibility = View.VISIBLE
-        binding.navView.visibility = View.VISIBLE
+        binding.navView.isVisible = true
     }
 
     fun hideBottomNavDrawer() {
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         binding.bottomNav.visibility = View.INVISIBLE
-        binding.navView.visibility = View.INVISIBLE
+        binding.navView.isVisible = false
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 }

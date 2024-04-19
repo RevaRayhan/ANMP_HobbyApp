@@ -72,8 +72,8 @@ class LoginFragment : Fragment() {
                 }
             })
 
-            viewModel.goNavigate.observe(viewLifecycleOwner, Observer {nav->
-                if (nav == true) {
+            viewModel.goNavigate.observe(viewLifecycleOwner, Observer {
+                if (it == true) {
                     mainActivity.showBottomNavDrawer()
                     val action = LoginFragmentDirections.actionhobbyListFragment()
                     Navigation.findNavController(view).navigate(action)

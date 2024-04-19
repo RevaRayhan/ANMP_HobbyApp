@@ -32,7 +32,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
                 val res = JSONObject(response)
                 if (res.getString("response") == "success") {
                     userLD.value = Gson().fromJson(res.getString("data"), User::class.java)
-                    goNavigate.value = true
+//                    goNavigate.value = true
 
                     Toast.makeText(getApplication(), "Login Successful", Toast.LENGTH_SHORT).show()
                     Log.d("Success", "Response: ${response}")
