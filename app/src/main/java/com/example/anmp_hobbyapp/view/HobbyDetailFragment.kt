@@ -54,6 +54,9 @@ class HobbyDetailFragment : Fragment() {
                 if (contentSize > 0) {
                     binding.txtContent.setText(it.content?.get(index))
                     binding.btnPrev.isEnabled = false
+                    if (contentSize == 1) {
+                        binding.btnNext.isEnabled = true
+                    }
 
                     binding.btnNext.setOnClickListener {view->
                         index += 1
